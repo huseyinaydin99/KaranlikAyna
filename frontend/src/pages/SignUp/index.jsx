@@ -6,13 +6,24 @@ export function SignUp() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [passwordRepeat, setPasswordRepeat] = useState();
+  const [apiProgress, setApiProgress] = useState(false);
+  const [successMessage, setSuccessMessage] = useState();
+
   const onSubmit = (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
     console.log(username + email + password);
+    setApiProgress(true);
+    setSuccessMessage(undefined);
     axios.post("http://localhost:8080/api/v1/users", {
       username,
       email,
       password,
+    }).then((response) => {
+      setSuccessMessage(response.data.message);
+    }).catch((err) => {
+      setSuccessMessage(undefined);
+    }).finally(() => {
+      setApiProgress(false);
     });
   };
   return (
@@ -75,11 +86,14 @@ export function SignUp() {
                 }}
               />
             </div>
+            {successMessage && <div className="alert alert-success">Kullanıcı kaydı yapıldı.</div>}
+            {!successMessage && <div className="alert alert-danger">Hata oluştu.</div>}
             <div>
               <button
                 disabled={!password || password !== passwordRepeat}
                 className="btn btn-primary">
-                Kaydol
+                  {apiProgress && <span><span className="spinner-border spinner-border-sm" aria-hidden="true"></span> Kaydol</span>}
+                  {!apiProgress && "Kaydol"}
               </button>
             </div>
           </div>
