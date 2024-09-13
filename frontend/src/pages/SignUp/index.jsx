@@ -1,20 +1,46 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { signUp } from "./api";
 
 export function SignUp() {
+  //getValue();
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [passwordRepeat, setPasswordRepeat] = useState();
   const [apiProgress, setApiProgress] = useState(false);
   const [successMessage, setSuccessMessage] = useState();
+  const [value, setValue] = useState();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
-    console.log(username + email + password);
+    setValue(1);
+    setSuccessMessage();
     setApiProgress(true);
-    setSuccessMessage(undefined);
-    axios.post("http://localhost:8080/api/v1/users", {
+
+    try{
+      const response = await signUp({username, email, password});
+      setSuccessMessage(response.data.message);
+      console.log(response.data.message);
+    }
+    catch{
+      //setSuccessMessage(undefined);
+    }
+    finally{
+      setApiProgress(false);
+    }
+    /*const response = signUp({username, email, password})
+    .then((response) => {
+      setSuccessMessage(response.data.message);
+    })
+    .catch((err) => {
+      setSuccessMessage(undefined);
+    })
+    .finally(() => {
+      setApiProgress(false);
+    });*/
+    
+    /*axios.post("http://localhost:8080/api/v1/users", {
       username,
       email,
       password,
@@ -24,7 +50,7 @@ export function SignUp() {
       setSuccessMessage(undefined);
     }).finally(() => {
       setApiProgress(false);
-    });
+    });*/
   };
   return (
     <div className="container">
@@ -87,9 +113,10 @@ export function SignUp() {
               />
             </div>
             {successMessage && <div className="alert alert-success">Kullanıcı kaydı yapıldı.</div>}
-            {!successMessage && <div className="alert alert-danger">Hata oluştu.</div>}
+            {!successMessage && value > 0 && <div className="alert alert-danger">Hata oluştu.</div>}
             <div>
               <button
+                onClick={() => setValue(1)}
                 disabled={!password || password !== passwordRepeat}
                 className="btn btn-primary">
                   {apiProgress && <span><span className="spinner-border spinner-border-sm" aria-hidden="true"></span> Kaydol</span>}
