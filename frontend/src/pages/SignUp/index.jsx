@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { signUp } from "./api";
 
@@ -11,6 +11,11 @@ export function SignUp() {
   const [apiProgress, setApiProgress] = useState(false);
   const [successMessage, setSuccessMessage] = useState();
   const [value, setValue] = useState();
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setErrors({});
+  }, [username]);
 
   const onSubmit = async (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
@@ -18,15 +23,19 @@ export function SignUp() {
     setSuccessMessage();
     setApiProgress(true);
 
-    try{
+    try {
       const response = await signUp({username, email, password});
       setSuccessMessage(response.data.message);
       console.log(response.data.message);
     }
-    catch{
+    catch(axiosError) {
+      console.log(axiosError);
+      if(axiosError.response?.data && axiosError.response.data.status === 400){
+        setErrors(axiosError.response.data.validationErrors);
+      }
       //setSuccessMessage(undefined);
     }
-    finally{
+    finally {
       setApiProgress(false);
     }
     /*const response = signUp({username, email, password})
@@ -67,11 +76,15 @@ export function SignUp() {
               <input
                 id="username"
                 type="text"
-                className="form-control"
+                className={errors.username ? "form-control is-invalid" : "form-control"}
                 onChange={(event) => {
                   setUsername(event.target.value);
+                  //setErrors({});
                 }}
               />
+            </div>
+            <div className="invalid-feedback">
+              {errors.username}
             </div>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
