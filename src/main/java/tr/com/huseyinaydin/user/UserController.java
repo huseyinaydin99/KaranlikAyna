@@ -21,14 +21,19 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/v1/users")
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        if(user.getUsername() == null || user.getUsername().isEmpty()){
-            ApiError apiError = new ApiError();
-            apiError.setPath("/api/v1/users");
-            apiError.setMessage("Doğrulama hatası");
-            apiError.setStatus(400);
-            Map<String, String> validationErrors = new HashMap<>();
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/v1/users");
+        apiError.setMessage("Doğrulama hatası");
+        apiError.setStatus(400);
+        Map<String, String> validationErrors = new HashMap<>();
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
             validationErrors.put("username", "Kullanıcı adı boş olamaz.");
+        }
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            validationErrors.put("mail", "E-posta adresi boş olamaz.");
+        }
+        if (validationErrors.size() > 0) {
             apiError.setValidationErrors(validationErrors);
             return ResponseEntity.badRequest().body(apiError);
         }
