@@ -12,6 +12,7 @@ export function SignUp() {
   const [successMessage, setSuccessMessage] = useState();
   const [value, setValue] = useState();
   const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState();
 
   useEffect(() => {
     setErrors({});
@@ -20,6 +21,7 @@ export function SignUp() {
   const onSubmit = async (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
     setValue(1);
+    setGeneralError();
     setSuccessMessage();
     setApiProgress(true);
 
@@ -32,6 +34,8 @@ export function SignUp() {
       console.log(axiosError);
       if(axiosError.response?.data && axiosError.response.data.status === 400){
         setErrors(axiosError.response.data.validationErrors);
+      }else{
+        setGeneralError("Bilinmeyen hata meydana geldi lütfen tekrar deneyiver gardeşim.");
       }
       //setSuccessMessage(undefined);
     }
@@ -125,8 +129,11 @@ export function SignUp() {
                 }}
               />
             </div>
-            {successMessage && <div className="alert alert-success">Kullanıcı kaydı yapıldı.</div>}
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {generalError && <div className="alert alert-danger">{generalError}</div>}
+            {/*
             {!successMessage && value > 0 && <div className="alert alert-danger">Hata oluştu.</div>}
+            */}
             <div>
               <button
                 onClick={() => setValue(1)}
