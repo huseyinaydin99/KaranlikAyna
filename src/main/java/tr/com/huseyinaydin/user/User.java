@@ -17,6 +17,8 @@ public class User {
 
     @NotBlank
     private String username;
+
+    @NotBlank
     private String email;
     private String password;
     private String passwordRepeat;
