@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { signUp } from "./api";
 import { Input } from "./components/input";
+import { useTranslation } from "react-i18next";
 
 export function SignUp() {
   //getValue();
@@ -14,6 +15,7 @@ export function SignUp() {
   const [value, setValue] = useState();
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setErrors(function(lastError){
@@ -68,7 +70,7 @@ export function SignUp() {
       if(axiosError.response?.data && axiosError.response.data.status === 400){
         setErrors(axiosError.response.data.validationErrors);
       }else{
-        setGeneralError("Bilinmeyen hata meydana geldi lütfen tekrar deneyiver gardeşim.");
+        setGeneralError(t('genericError'));
       }
       //setSuccessMessage(undefined);
     }
@@ -101,7 +103,7 @@ export function SignUp() {
 
   const passwordRepeatError = useMemo(() => {
     if(password && password !== passwordRepeat) {
-      return 'Password mismatch'
+      return t('passwordMismatch')
     }
     return '';
   }, [password, passwordRepeat]); // useMemo burada password ve passwordRepeat alanlarında değişiklik olmuşsa kod bloğu çalışıyor ki her render olduğında aynı işlemi yapmasın diye.
@@ -111,16 +113,16 @@ export function SignUp() {
       <div className="col-lg-6 offset-lg-3 col-sm-8 offset-sm-2">
         <form className="card" onSubmit={onSubmit}>
           <div className="text-center card-header">
-            <h1>Kaydol</h1>
+            <h1>{t('signUp')}</h1>
           </div>
           <div className="card-body">
-            <Input id="username" label="Kullanıcı Adı" error={errors.username}
+            <Input id="username" label={t('username')} error={errors.username}
             onChange={(event) => setUsername(event.target.value)} />
-            <Input id="email" label="E-posta Adresi" error={errors.email}
+            <Input id="email" label={t('email')} error={errors.email}
             onChange={(event) => setEmail(event.target.value)} />
-            <Input id="password" label="Şifre" error={errors.password}
+            <Input id="password" label={t('password')} error={errors.password}
             onChange={(event) => setPassword(event.target.value)} type="password" />
-            <Input id="passwordRepeat" label="Şifre Tekrarı" error={passwordRepeatError}
+            <Input id="passwordRepeat" label={t('passwordRepeat')} error={passwordRepeatError}
             onChange={(event) => setPasswordRepeat(event.target.value)} type="password" />
 
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
@@ -134,8 +136,8 @@ export function SignUp() {
                 onClick={() => setValue(1)}
                 disabled={!password || password !== passwordRepeat}
                 className="btn btn-primary">
-                  {apiProgress && <span><span className="spinner-border spinner-border-sm" aria-hidden="true"></span> Kaydol</span>}
-                  {!apiProgress && "Kaydol"}
+                  {apiProgress && <span><span className="spinner-border spinner-border-sm" aria-hidden="true"></span> {t('signUp')}</span>}
+                  {!apiProgress && t('signUp')}
               </button>
             </div>
           </div>
