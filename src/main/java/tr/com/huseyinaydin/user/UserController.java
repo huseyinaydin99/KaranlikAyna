@@ -1,5 +1,7 @@
 package tr.com.huseyinaydin.user;
 
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import tr.com.huseyinaydin.shared.Messages;
 
 @RestController
 public class UserController {
@@ -28,9 +27,10 @@ public class UserController {
     @CrossOrigin
     @PostMapping("/api/v1/users")
     public GenericMessage createUser(@Valid @RequestBody User user) {
-        System.err.println("Uygulama dili: " + LocaleContextHolder.getLocale().getLanguage());
+        //System.err.println("Uygulama dili - tarayıcı dili: " + LocaleContextHolder.getLocale().getLanguage());
         userService.save(user);
-        return new GenericMessage("Kullanıcı oluşturuldu.");
+        String message = Messages.getMessageForLocale("KaranlikAyna.create.user.success.message", LocaleContextHolder.getLocale());
+        return new GenericMessage(message);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -38,7 +38,8 @@ public class UserController {
     public ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception){
         ApiError apiError = new ApiError();
         apiError.setPath("/api/v1/users");
-        apiError.setMessage("Doğrulama hatası.");
+        String message = Messages.getMessageForLocale("KaranlikAyna.error.validation", LocaleContextHolder.getLocale());
+        apiError.setMessage(message);
         apiError.setStatus(400);
         /*Map<String, String> validationErrors = new HashMap<>();
         for(var filedError: exception.getBindingResult().getFieldErrors()){
@@ -56,11 +57,9 @@ public class UserController {
     public ResponseEntity<ApiError> handleNotUniqueEmailEx(NotUniqueEmailException exception){
         ApiError apiError = new ApiError();
         apiError.setPath("/api/v1/users");
-        apiError.setMessage("Doğrulama hatası");
+        apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
-        Map<String, String> validationErrors = new HashMap<>();
-        validationErrors.put("email", "Bu e-posta adresi zaten kayıtlıdır.");
-        apiError.setValidationErrors(validationErrors);
+        apiError.setValidationErrors(exception.getValidationErrors());
         return ResponseEntity.badRequest().body(apiError);
     }
 }
