@@ -1,4 +1,4 @@
-package tr.com.huseyinaydin.user;
+package tr.com.huseyinaydin.user.exception;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 

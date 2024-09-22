@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
+import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 @RestController
 public class UserController {
