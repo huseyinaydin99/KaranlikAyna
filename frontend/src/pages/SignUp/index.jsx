@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { signUp } from "./api";
 import { Input } from "./components/input";
@@ -98,6 +98,14 @@ export function SignUp() {
       setApiProgress(false);
     });*/
   };
+
+  const passwordRepeatError = useMemo(() => {
+    if(password && password !== passwordRepeat) {
+      return 'Password mismatch'
+    }
+    return '';
+  }, [password, passwordRepeat]); // useMemo burada password ve passwordRepeat alanlarında değişiklik olmuşsa kod bloğu çalışıyor ki her render olduğında aynı işlemi yapmasın diye.
+
   return (
     <div className="container">
       <div className="col-lg-6 offset-lg-3 col-sm-8 offset-sm-2">
@@ -112,7 +120,7 @@ export function SignUp() {
             onChange={(event) => setEmail(event.target.value)} />
             <Input id="password" label="Şifre" error={errors.password}
             onChange={(event) => setPassword(event.target.value)} type="password" />
-            <Input id="passwordRepeat" label="Şifre Tekrarı" error={errors.passwordRepeat}
+            <Input id="passwordRepeat" label="Şifre Tekrarı" error={passwordRepeatError}
             onChange={(event) => setPasswordRepeat(event.target.value)} type="password" />
 
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
