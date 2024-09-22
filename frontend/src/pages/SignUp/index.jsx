@@ -33,6 +33,24 @@ export function SignUp() {
     });
   }, [email]);
 
+  useEffect(() => {
+    setErrors(function(lastError){
+        return {
+          ...lastError,
+          password: undefined
+        }
+    });
+  }, [password]);
+
+  useEffect(() => {
+    setErrors(function(lastError){
+        return {
+          ...lastError,
+          passwordRepeat: undefined
+        }
+    });
+  }, [passwordRepeat]);
+
   const onSubmit = async (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
     setValue(1);
@@ -92,38 +110,17 @@ export function SignUp() {
             onChange={(event) => setUsername(event.target.value)} />
             <Input id="email" label="E-posta Adresi" error={errors.email}
             onChange={(event) => setEmail(event.target.value)} />
-            
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Şifre
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="form-control"
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="passwordRepeat" className="form-label">
-                Şifre Tekrarı
-              </label>
-              <input
-                id="passwordRepeat"
-                type="password"
-                className="form-control"
-                onChange={(event) => {
-                  setPasswordRepeat(event.target.value);
-                }}
-              />
-            </div>
+            <Input id="password" label="Şifre" error={errors.password}
+            onChange={(event) => setPassword(event.target.value)} type="password" />
+            <Input id="passwordRepeat" label="Şifre Tekrarı" error={errors.passwordRepeat}
+            onChange={(event) => setPasswordRepeat(event.target.value)} type="password" />
+
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
             {generalError && <div className="alert alert-danger">{generalError}</div>}
             {/*
             {!successMessage && value > 0 && <div className="alert alert-danger">Hata oluştu.</div>}
             */}
+
             <div>
               <button
                 onClick={() => setValue(1)}

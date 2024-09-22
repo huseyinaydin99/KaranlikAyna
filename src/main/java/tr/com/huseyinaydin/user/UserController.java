@@ -47,7 +47,7 @@ public class UserController {
         }*/
         var validationErrors = exception.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
             FieldError::getField,
-            FieldError::getDefaultMessage));
+            FieldError::getDefaultMessage, (existing, replacing) -> existing));
         apiError.setValidationErrors(validationErrors);
         return ResponseEntity.badRequest().body(apiError);
     }
