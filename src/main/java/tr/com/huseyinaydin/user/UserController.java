@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/api/v1/users")
     public GenericMessage createUser(@Valid @RequestBody User user) {
         userService.save(user);
-        return new GenericMessage("Kullanıcı oluşturuldu");
+        return new GenericMessage("Kullanıcı oluşturuldu.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception){
         ApiError apiError = new ApiError();
         apiError.setPath("/api/v1/users");
-        apiError.setMessage("Doğrulama hatası");
+        apiError.setMessage("Doğrulama hatası.");
         apiError.setStatus(400);
         /*Map<String, String> validationErrors = new HashMap<>();
         for(var filedError: exception.getBindingResult().getFieldErrors()){
@@ -48,6 +48,19 @@ public class UserController {
         var validationErrors = exception.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
             FieldError::getField,
             FieldError::getDefaultMessage, (existing, replacing) -> existing));
+        apiError.setValidationErrors(validationErrors);
+        return ResponseEntity.badRequest().body(apiError);
+    }
+
+    @ExceptionHandler(NotUniqueEmailException.class)
+    //@ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiError> handleNotUniqueEmailEx(NotUniqueEmailException exception){
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/v1/users");
+        apiError.setMessage("Doğrulama hatası");
+        apiError.setStatus(400);
+        Map<String, String> validationErrors = new HashMap<>();
+        validationErrors.put("email", "Bu e-posta adresi zaten kayıtlıdır.");
         apiError.setValidationErrors(validationErrors);
         return ResponseEntity.badRequest().body(apiError);
     }
