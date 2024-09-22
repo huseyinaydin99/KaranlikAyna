@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
+    @NotBlank(message = "{KaranlikAyna.constraint.username.notblank}")
     @Size(min = 4, max = 255)
     private String username;
 
@@ -29,7 +29,8 @@ public class User {
     private String email;
 
     @Size(min = 8, max=255)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    //@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{KaranlikAyna.constraint.password.pattern}")
     private String password;
     private String passwordRepeat;
 

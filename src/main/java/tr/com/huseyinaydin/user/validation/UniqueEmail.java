@@ -11,7 +11,7 @@ import jakarta.validation.Payload;
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueEmail {
-    String message() default "Bu e-posta adresi zaten kayıtlıdır.";
+    String message() default "{KaranlikAyna.constraint.email.notunique}";
 	Class<?>[] groups() default { };
 	Class<? extends Payload>[] payload() default { };   
 }

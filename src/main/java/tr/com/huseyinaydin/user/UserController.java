@@ -1,7 +1,7 @@
 package tr.com.huseyinaydin.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -18,7 +17,6 @@ import tr.com.huseyinaydin.shared.GenericMessage;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,6 +28,7 @@ public class UserController {
     @CrossOrigin
     @PostMapping("/api/v1/users")
     public GenericMessage createUser(@Valid @RequestBody User user) {
+        System.err.println("Uygulama dili: " + LocaleContextHolder.getLocale().getLanguage());
         userService.save(user);
         return new GenericMessage("Kullanıcı oluşturuldu.");
     }
