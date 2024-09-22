@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { signUp } from "./api";
+import { Input } from "./components/input";
 
 export function SignUp() {
   //getValue();
@@ -15,8 +16,22 @@ export function SignUp() {
   const [generalError, setGeneralError] = useState();
 
   useEffect(() => {
-    setErrors({});
+    setErrors(function(lastError){
+        return {
+          ...lastError,
+          username: undefined
+        }
+    });
   }, [username]);
+
+  useEffect(() => {
+    setErrors(function(lastError){
+        return {
+          ...lastError,
+          email: undefined
+        }
+    });
+  }, [email]);
 
   const onSubmit = async (event) => {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
@@ -73,36 +88,11 @@ export function SignUp() {
             <h1>Kaydol</h1>
           </div>
           <div className="card-body">
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Kullanıcı Adı
-              </label>
-              <input
-                id="username"
-                type="text"
-                className={errors.username ? "form-control is-invalid" : "form-control"}
-                onChange={(event) => {
-                  setUsername(event.target.value);
-                  //setErrors({});
-                }}
-              />
-            </div>
-            <div className="invalid-feedback">
-              {errors.username}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                E-Posta
-              </label>
-              <input
-                id="email"
-                type="text"
-                className="form-control"
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                }}
-              />
-            </div>
+            <Input id="username" label="Kullanıcı Adı" error={errors.username}
+            onChange={(event) => setUsername(event.target.value)} />
+            <Input id="email" label="E-posta Adresi" error={errors.email}
+            onChange={(event) => setEmail(event.target.value)} />
+            
             <div className="mb-3">
               <label htmlFor="password" className="form-label">
                 Şifre
