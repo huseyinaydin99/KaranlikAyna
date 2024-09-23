@@ -26,7 +26,7 @@ public class UserService {
         try{
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setActivationToken(UUID.randomUUID().toString());
-            userRepository.save(user);
+            userRepository.saveAndFlush(user); //kendi catch'imize düşmesi için kullandık. Transactional dipnotu kullanılınca Spring bize Proxy nesne yaratıyor ve orada da try catch yapısı mevcut.
         }
         catch(DataIntegrityViolationException ex){
 

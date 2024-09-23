@@ -17,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     /*@NotBlank(message = "{KaranlikAyna.constraint.username.notblank}")
     @Size(min = 4, max = 255)*/
