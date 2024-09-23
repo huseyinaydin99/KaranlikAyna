@@ -1,15 +1,19 @@
 package tr.com.huseyinaydin.error;
 
 import java.util.Date;
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(value = Include.NON_NULL) //null olmayanları JSON'a dönüştürür. null olanları ise JSON haline getirmez ve görmezden gelir.
 public class ApiError {
     private int status;
     private String message;
     private String path;
     private long timestamp;
-    private Map<String, String> validationErrors = new HashMap<>();
+    private Map<String, String> validationErrors = null;
 
     public Map<String, String> getValidationErrors() {
         return validationErrors;

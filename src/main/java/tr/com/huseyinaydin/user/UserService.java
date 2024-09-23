@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
+import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 @Service
 public class UserService {
@@ -27,9 +29,13 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setActivationToken(UUID.randomUUID().toString());
             userRepository.saveAndFlush(user); //kendi catch'imize düşmesi için kullandık. Transactional dipnotu kullanılınca Spring bize Proxy nesne yaratıyor ve orada da try catch yapısı mevcut.
+            sendActivationEmail(user);
         }
         catch(DataIntegrityViolationException ex){
-
+            throw new NotUniqueEmailException();
+        }
+        catch (MailException ex) {
+            throw new ActivationNotificationException();
         }
     }
 

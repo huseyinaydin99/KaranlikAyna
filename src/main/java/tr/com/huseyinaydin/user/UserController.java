@@ -18,6 +18,7 @@ import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
 import tr.com.huseyinaydin.user.dto.UserCreate;
+import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 @RestController
@@ -62,6 +63,15 @@ public class UserController {
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
         apiError.setValidationErrors(exception.getValidationErrors());
-        return ResponseEntity.badRequest().body(apiError);
+        return ResponseEntity.status(400).body(apiError);
+    }
+
+    @ExceptionHandler(ActivationNotificationException.class)
+    public ResponseEntity<ApiError> handleActivationNotificationException(ActivationNotificationException exception){
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/v1/users");
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(502);
+        return ResponseEntity.status(502).body(apiError);
     }
 }
