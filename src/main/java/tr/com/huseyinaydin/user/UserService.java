@@ -4,12 +4,15 @@ import java.util.UUID;
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -18,6 +21,7 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Transactional(rollbackOn = MailException.class)
     public void save(User user){
         try{
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -44,6 +48,7 @@ public class UserService {
         mailSender.setPort(587);
         mailSender.setUsername("deon.williamson23@ethereal.email");
         mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf");
+        //mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf-"); //hataya neden olması için koydum. MailException oluşsunda Transactional dipnotu çalışsın ve rollback etsin diye.
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.smtp.starttls.enable", "true");
         return mailSender;
