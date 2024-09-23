@@ -1,5 +1,6 @@
 package tr.com.huseyinaydin.user;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ public class UserService {
     public void save(User user){
         try{
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setActivationToken(UUID.randomUUID().toString());
             userRepository.save(user);
         }
         catch(DataIntegrityViolationException ex){

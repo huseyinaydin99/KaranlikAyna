@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
+import tr.com.huseyinaydin.user.dto.UserCreate;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 @RestController
@@ -27,9 +28,9 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/v1/users")
-    public GenericMessage createUser(@Valid @RequestBody User user) {
+    public GenericMessage createUser(@Valid @RequestBody UserCreate user) {
         //System.err.println("Uygulama dili - tarayıcı dili: " + LocaleContextHolder.getLocale().getLanguage());
-        userService.save(user);
+        userService.save(user.toUser());
         String message = Messages.getMessageForLocale("KaranlikAyna.create.user.success.message", LocaleContextHolder.getLocale());
         return new GenericMessage(message);
     }
