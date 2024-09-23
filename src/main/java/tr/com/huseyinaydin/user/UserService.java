@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import tr.com.huseyinaydin.email.EmailService;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
@@ -20,6 +21,9 @@ import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -29,7 +33,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setActivationToken(UUID.randomUUID().toString());
             userRepository.saveAndFlush(user); //kendi catch'imize düşmesi için kullandık. Transactional dipnotu kullanılınca Spring bize Proxy nesne yaratıyor ve orada da try catch yapısı mevcut.
-            sendActivationEmail(user);
+            emailService.sendActivationEmail(user.getEmail(), user.getActivationToken());
         }
         catch(DataIntegrityViolationException ex){
             throw new NotUniqueEmailException();
@@ -37,26 +41,5 @@ public class UserService {
         catch (MailException ex) {
             throw new ActivationNotificationException();
         }
-    }
-
-    private void sendActivationEmail(User user) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@my-app.com");
-        message.setTo(user.getEmail());
-        message.setSubject("Hesap Aktivasyonu");
-        message.setText("http://localhost:5173/activation/" + user.getActivationToken());
-        getJavaMailSender().send(message);
-    }
-
-    public JavaMailSender getJavaMailSender(){
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.ethereal.email");
-        mailSender.setPort(587);
-        mailSender.setUsername("deon.williamson23@ethereal.email");
-        mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf");
-        //mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf-"); //hataya neden olması için koydum. MailException oluşsunda Transactional dipnotu çalışsın ve rollback etsin diye.
-        Properties properties = mailSender.getJavaMailProperties();
-        properties.put("mail.smtp.starttls.enable", "true");
-        return mailSender;
     }
 }
