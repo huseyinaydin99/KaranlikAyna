@@ -5,3 +5,5 @@ npm install
 npm run dev //geliştirici modunda çalıştırır.
 npm install bootstrap //bootstrap paketini kurar.
 npm i -D sass //sass paketini developer dependency olarak kurar. geliştiricinin eklediği paket zannımca öyle.
+
+npm i react-router-dom --<<React Router'i kurar.
