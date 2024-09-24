@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.email.EmailService;
+import tr.com.huseyinaydin.user.dto.UserProjection;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
@@ -58,7 +59,7 @@ public class UserService {
         userRepository.save(inDB);
     }
 
-    public Page<User> getUsers(Pageable page) {
-        return userRepository.findAll(page);
+    public Page<UserProjection> getUsers(Pageable page) {
+        return userRepository.getAllUserRecords(page);
     }
 }

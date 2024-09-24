@@ -24,6 +24,7 @@ import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
 import tr.com.huseyinaydin.user.dto.UserCreate;
+import tr.com.huseyinaydin.user.dto.UserProjection;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
@@ -50,7 +51,7 @@ public class UserController {
         return new GenericMessage(message);
     }
 
-    public Page<User> getUsers(Pageable page){
+    public Page<UserProjection> getUsers(Pageable page){
         return userService.getUsers(page);
     }
 
