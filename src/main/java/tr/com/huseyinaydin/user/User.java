@@ -1,5 +1,7 @@
 package tr.com.huseyinaydin.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,10 +33,14 @@ public class User {
     /*@Size(min = 8, max=255)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{KaranlikAyna.constraint.password.pattern}")*/
+    @JsonIgnore
     private String password;
     private String passwordRepeat;
 
+    @JsonIgnore
     boolean active = false;
+    
+    @JsonIgnore
     String activationToken;
 
     public String getActivationToken() {
