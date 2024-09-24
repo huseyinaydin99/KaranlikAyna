@@ -1,13 +1,13 @@
 package tr.com.huseyinaydin.user;
 
 import java.util.UUID;
-import java.util.Properties;
+//import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
+/*import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSenderImpl;*/
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
