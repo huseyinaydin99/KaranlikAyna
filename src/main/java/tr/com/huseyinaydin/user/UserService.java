@@ -19,6 +19,9 @@ import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class UserService {
     @Autowired
@@ -55,7 +58,7 @@ public class UserService {
         userRepository.save(inDB);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public Page<User> getUsers(Pageable page) {
+        return userRepository.findAll(page);
     }
 }
