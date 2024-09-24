@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.email.EmailService;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
+import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 @Service
@@ -41,5 +42,15 @@ public class UserService {
         catch (MailException ex) {
             throw new ActivationNotificationException();
         }
+    }
+
+    public void activateUser(String token) {
+        User inDB = userRepository.findByActivationToken(token);
+        if(inDB == null) {
+            throw new InvalidTokenException();
+        }
+        inDB.setActive(true);
+        inDB.setActivationToken(null);
+        userRepository.save(inDB);
     }
 }
