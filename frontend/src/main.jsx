@@ -9,8 +9,5 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router/index.js";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <SignUp />
-    <RouterProvider router={router} />
-  </StrictMode>
+  <RouterProvider router={router} />
 );
