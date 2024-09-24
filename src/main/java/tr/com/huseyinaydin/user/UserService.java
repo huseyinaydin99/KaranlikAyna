@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.email.EmailService;
-import tr.com.huseyinaydin.user.dto.UserProjection;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
