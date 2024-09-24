@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { activateUser } from "./api";
+import { Alert } from "../../shared/components/Alert";
+import { Spinner } from "../../shared/components/Spinner";
 
 export function Activation() {
   const { token } = useParams(); //maile gelen linke tıklayınca parametreden gelen token'i alır.
@@ -23,16 +25,16 @@ export function Activation() {
     }
     activate();
   }, []);
-  
+
   return (
     <>
       {apiProgress && (
-        <span className="spinner-border" aria-hidden="true"></span>
+        <Alert styleType="secondary" center>
+          <Spinner />
+        </Alert>
       )}
-      {successMessage && (
-        <div className="alert alert-success">{successMessage}</div>
-      )}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      {successMessage && <Alert>{successMessage}</Alert>}
+      {errorMessage && <Alert styleType="danger">{errorMessage}</Alert>}
     </>
   );
 }

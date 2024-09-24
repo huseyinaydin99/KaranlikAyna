@@ -2,6 +2,7 @@ import { Link, Outlet } from "react-router-dom";
 import logo from "./assets/karanlikayna.png";
 import { LanguageSelector } from "./shared/components/LanguageSelector";
 import { useTranslation } from "react-i18next";
+import { NavBar } from "./shared/components/NavBar";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,19 +11,7 @@ function App() {
 
   return (
     <>
-      <nav className="navbar navbar-expand bg-body-tertiary shadow-sm">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            <img src={logo} width={60} />
-            Karanlık Ayna Platformu
-          </Link>
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/signup">{t('signUp')}</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <NavBar />
       <div className="container mt-3">
         <Outlet />
         {

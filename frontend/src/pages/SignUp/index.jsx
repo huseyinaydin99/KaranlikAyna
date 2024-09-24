@@ -3,6 +3,8 @@ import axios from "axios";
 import { signUp } from "./api";
 import { Input } from "./components/input";
 import { useTranslation } from "react-i18next";
+import { Alert } from "../../shared/components/Alert";
+import { Spinner } from "../../shared/components/Spinner";
 
 export function SignUp() {
   //getValue();
@@ -145,12 +147,8 @@ export function SignUp() {
               type="password"
             />
 
-            {successMessage && (
-              <div className="alert alert-success">{successMessage}</div>
-            )}
-            {generalError && (
-              <div className="alert alert-danger">{generalError}</div>
-            )}
+            {successMessage && <Alert>{successMessage}</Alert>}
+            {generalError && <Alert styleType="danger">{generalError}</Alert>}
             {/*
             {!successMessage && value > 0 && <div className="alert alert-danger">Hata oluştu.</div>}
             */}
@@ -161,15 +159,7 @@ export function SignUp() {
                 disabled={!password || password !== passwordRepeat}
                 className="btn btn-primary"
               >
-                {apiProgress && (
-                  <span>
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    ></span>{" "}
-                    {t("signUp")}
-                  </span>
-                )}
+                {apiProgress && <Spinner sm={true} />}
                 {!apiProgress && t("signUp")}
               </button>
             </div>
