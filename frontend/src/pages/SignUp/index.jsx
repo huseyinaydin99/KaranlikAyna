@@ -3,8 +3,8 @@ import axios from "axios";
 import { signUp } from "./api";
 import { Input } from "./components/input";
 import { useTranslation } from "react-i18next";
-import { Alert } from "../../shared/components/Alert";
-import { Spinner } from "../../shared/components/Spinner";
+import { Alert } from "@/shared/components/Alert";
+import { Spinner } from "@/shared/components/Spinner";
 
 export function SignUp() {
   //getValue();
