@@ -1,5 +1,6 @@
 package tr.com.huseyinaydin.user;
 
+import java.util.List;
 import java.util.UUID;
 //import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,9 @@ public class UserService {
         inDB.setActive(true);
         inDB.setActivationToken(null);
         userRepository.save(inDB);
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 }
