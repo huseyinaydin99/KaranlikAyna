@@ -1,4 +1,4 @@
-package tr.com.huseyinaydin.user.dto;
+/*package tr.com.huseyinaydin.user.dto;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -13,4 +13,4 @@ public interface UserProjection {
     
     @Value("#{target.firstName + ' ' + target.lastName}")
     String getFullname();
-}
+}*/

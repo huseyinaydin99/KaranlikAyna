@@ -44,7 +44,7 @@ public class User {
     String activationToken;
 
     String image;
-    String firstName;
+    /*String firstName;
     String lastName;
 
     public String getFirstName() {
@@ -61,7 +61,7 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
+    }*/
 
     public String getImage() {
         return image;

@@ -24,7 +24,7 @@ import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
 import tr.com.huseyinaydin.user.dto.UserCreate;
-import tr.com.huseyinaydin.user.dto.UserProjection;
+import tr.com.huseyinaydin.user.dto.UserDTO;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
@@ -51,8 +51,9 @@ public class UserController {
         return new GenericMessage(message);
     }
 
-    public Page<UserProjection> getUsers(Pageable page){
-        return userService.getUsers(page);
+    @GetMapping("/api/v1/users")
+    public Page<UserDTO> getUsers(Pageable page){
+        return userService.getUsers(page).map(UserDTO::new);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

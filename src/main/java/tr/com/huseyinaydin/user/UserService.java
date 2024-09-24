@@ -59,7 +59,7 @@ public class UserService {
         userRepository.save(inDB);
     }
 
-    public Page<UserProjection> getUsers(Pageable page) {
-        return userRepository.getAllUserRecords(page);
+    public Page<User> getUsers(Pageable page) {
+        return userRepository.findAll(page);
     }
 }
