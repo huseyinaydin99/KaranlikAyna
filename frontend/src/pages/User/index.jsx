@@ -5,6 +5,7 @@ import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
 import { withTranslation } from "react-i18next";
 import { useRouteParamApiRequest } from "@/shared/hooks/useRouteParamApiRequest";
+import { ProfileCard } from "./components/ProfileCard";
 
 /*
 export class UserClass extends Component {
@@ -73,7 +74,6 @@ export function User() {
 */
 
 export function User() {
-
   const {
     apiProgress,
     data: user, //data'ya takma isim verdik.
@@ -87,7 +87,7 @@ export function User() {
           <Spinner />
         </Alert>
       )}
-      {user && <h1>{user.username}</h1>}
+      {user && <ProfileCard user={user} />}
       {error && <Alert styleType="danger">{error}</Alert>}
     </>
   );
