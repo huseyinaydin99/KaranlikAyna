@@ -24,7 +24,12 @@ export function Activation() {
       }
     }
     activate();
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    console.log('mounted');
+    return () => console.log('unmounted') //bu haliyle useEffect return ile bir fonksiyon dönerse o kısım unmounteddir.
+  }, [])
 
   return (
     <>

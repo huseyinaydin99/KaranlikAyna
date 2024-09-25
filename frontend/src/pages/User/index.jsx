@@ -12,7 +12,8 @@ export class UserClass extends Component {
     error: null,
   };
 
-  async componentDidMount() {
+  //async componentDidMount()
+  loadUser = async () => {
     this.setState({ apiProgress: true });
     try {
       const response = await getUser(this.props.id);
@@ -26,6 +27,21 @@ export class UserClass extends Component {
     } finally {
       this.setState({ apiProgress: false });
     }
+  }
+
+  async componentDidMount() { //component ekranda gösterildiğinde.
+    this.loadUser();
+  }
+
+  componentDidUpdate(previousProps, previousState){ //component'de değişiklik olduğunda.
+    //şu anki Id ile bir önceki Id farklıysa kullanıcı verilerini yükle.
+    if(this.props.id !== previousProps.id) { //User component ilk açıldığında componentDidMount bir defa çalışıyor. 2. kullanıcı için açıldığında tekrar çalışmıyor dolayısıyla 2. kullanıcının verileri gelmiyor.
+        this.loadUser(); //bu yüzden component her güncellendiğinde kullanıcının verileri gelsin diye kullandık.
+    }
+  }
+
+  componentWillUnmount(){ //component çıkarıldığında.
+
   }
 
   render() {
