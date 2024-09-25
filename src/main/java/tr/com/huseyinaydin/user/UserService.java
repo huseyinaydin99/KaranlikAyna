@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.email.EmailService;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
+import tr.com.huseyinaydin.user.exception.NotFoundException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 import org.springframework.data.domain.Page;
@@ -63,6 +64,6 @@ public class UserService {
     }
 
     public User getUser(long id) {
-        return userRepository.getReferenceById(id);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 }

@@ -27,6 +27,7 @@ import tr.com.huseyinaydin.user.dto.UserCreate;
 import tr.com.huseyinaydin.user.dto.UserDTO;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
+import tr.com.huseyinaydin.user.exception.NotFoundException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -113,11 +114,11 @@ public class UserController {
         return ResponseEntity.status(400).body(apiError);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request){
+    public @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<ApiError> handleNotFoundException(NotFoundException exception, HttpServletRequest request){
         ApiError apiError = new ApiError();
         apiError.setPath(request.getRequestURI());
-        apiError.setMessage("Not found");
+        apiError.setMessage(exception.getMessage());
         apiError.setStatus(404);
         return ResponseEntity.status(404).body(apiError);
     }
