@@ -54,7 +54,7 @@ export function UserList() {
         <div className="card-header text-center fs-4">Kullanıcı Listesi</div>
         <ul className="list-group list-group-flush">
           {userPage.content.map((user) => {
-            return <UserListItem key={user.id} user={user}/>;
+            return <UserListItem key={user.id} user={user}/>; //key verilmesinin sebebi list item'ların birbirinden farklı olmasını sağlamaktır. Bir sonraki sayfaya geçince yeni list item'ların gelmesini sağlamak.
           })}
         </ul>
         <div className="card-footer text-center">

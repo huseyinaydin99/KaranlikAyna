@@ -29,6 +29,9 @@ import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 public class UserController {
 
@@ -54,6 +57,11 @@ public class UserController {
     @GetMapping("/api/v1/users")
     public Page<UserDTO> getUsers(Pageable page){
         return userService.getUsers(page).map(UserDTO::new);
+    }
+
+    @GetMapping("/api/v1/users/{id}")
+    UserDTO getUserById(@PathVariable long id){
+        return new UserDTO(userService.getUser(id));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -96,11 +104,21 @@ public class UserController {
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ApiError> handleInvalidTokenException(InvalidTokenException exception){
+    public ResponseEntity<ApiError> handleInvalidTokenException(InvalidTokenException exception, HttpServletRequest request){
         ApiError apiError = new ApiError();
         apiError.setPath("/api/v1/users");
+        apiError.setPath(request.getRequestURI());
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
         return ResponseEntity.status(400).body(apiError);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException exception, HttpServletRequest request){
+        ApiError apiError = new ApiError();
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage("Not found");
+        apiError.setStatus(404);
+        return ResponseEntity.status(404).body(apiError);
     }
 }
