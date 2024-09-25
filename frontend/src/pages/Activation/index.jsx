@@ -6,30 +6,11 @@ import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
 
 export function Activation() {
-  const { token } = useParams(); //maile gelen linke tıklayınca parametreden gelen token'i alır.
-  const [apiProgress, setApiProgress] = useState();
-  const [successMessage, setSuccessMessage] = useState();
-  const [errorMessage, setErrorMessage] = useState();
 
-  useEffect(() => {
-    async function activate() {
-      setApiProgress(true);
-      try {
-        const response = await activateUser(token);
-        setSuccessMessage(response.data.message);
-      } catch (axiosError) {
-        setErrorMessage(axiosError.response.data.message);
-      } finally {
-        setApiProgress(false);
-      }
-    }
-    activate();
-  }, [token]);
-
-  useEffect(() => {
-    console.log('mounted');
-    return () => console.log('unmounted') //bu haliyle useEffect return ile bir fonksiyon dönerse o kısım unmounteddir.
-  }, [])
+  const { apiProgress, data, error } = useRouteParamApiRequest(
+    "token",
+    activateUser
+  );
 
   return (
     <>
@@ -38,8 +19,8 @@ export function Activation() {
           <Spinner />
         </Alert>
       )}
-      {successMessage && <Alert>{successMessage}</Alert>}
-      {errorMessage && <Alert styleType="danger">{errorMessage}</Alert>}
+      {data?.message && <Alert>{data.message}</Alert>}
+      {error && <Alert styleType="danger">{error}</Alert>}
     </>
   );
 }

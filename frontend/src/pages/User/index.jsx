@@ -4,7 +4,9 @@ import { getUser } from "./api";
 import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
 import { withTranslation } from "react-i18next";
+import { useRouteParamApiRequest } from "@/shared/hooks/useRouteParamApiRequest";
 
+/*
 export class UserClass extends Component {
   state = {
     user: null,
@@ -67,4 +69,26 @@ export function User() {
   const { id } = useParams();
   //return <UserClass id={id} />;
   return <UserPageWithTranslation id={id} />;
+}
+*/
+
+export function User() {
+
+  const {
+    apiProgress,
+    data: user, //data'ya takma isim verdik.
+    error,
+  } = useRouteParamApiRequest("id", getUser);
+
+  return (
+    <>
+      {apiProgress && (
+        <Alert styleType="secondary" center>
+          <Spinner />
+        </Alert>
+      )}
+      {user && <h1>{user.username}</h1>}
+      {error && <Alert styleType="danger">{error}</Alert>}
+    </>
+  );
 }
