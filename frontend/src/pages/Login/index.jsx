@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { signUp } from "./api";
-import { Input } from "./components/input";
+import { Input } from "@/shared/components/Input";
+import { Button } from "@/shared/components/Button";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
@@ -130,21 +131,14 @@ export function Login() {
               onChange={(event) => setPassword(event.target.value)}
               type="password"
             />
-
             {generalError && <Alert styleType="danger">{generalError}</Alert>}
-            {/*
-            {!successMessage && value > 0 && <div className="alert alert-danger">Hata oluştu.</div>}
-            */}
-
             <div>
-              <button
-                onClick={() => setValue(1)}
+              <Button
                 disabled={!password || password !== passwordRepeat}
-                className="btn btn-primary"
+                apiProgress={apiProgress}
               >
-                {apiProgress && <Spinner sm={true} />}
-                {!apiProgress && t("login")}
-              </button>
+                {t("login")}
+              </Button>
             </div>
           </div>
         </form>

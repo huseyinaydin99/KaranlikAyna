@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { signUp } from "./api";
-import { Input } from "./components/input";
+import { Input } from "@/shared/components/Input";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
+import { Button } from "@/shared/components/Button";
 
 export function SignUp() {
   //getValue();
@@ -154,14 +155,12 @@ export function SignUp() {
             */}
 
             <div>
-              <button
-                onClick={() => setValue(1)}
+              <Button
                 disabled={!password || password !== passwordRepeat}
-                className="btn btn-primary"
+                apiProgress={apiProgress}
               >
-                {apiProgress && <Spinner sm={true} />}
-                {!apiProgress && t("signUp")}
-              </button>
+                {t("signUp")}
+              </Button>
             </div>
           </div>
         </form>

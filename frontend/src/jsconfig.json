@@ -1,4 +1,5 @@
-{//bu dosya VS Code'un @ harfini yani src içini algılaması için.
+{
+    //bu dosya VS Code'un @ harfini yani src içini algılaması için.
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
