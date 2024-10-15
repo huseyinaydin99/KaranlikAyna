@@ -6,5 +6,6 @@
     "passwordRepeat": "Şifre Tekrari",
     "passwordMismatch": "Sifreniz eslesmiyor.",
     "genericError": "Tövbeler olsun beklenmedik bir hata olustu. Lutfen tekrar deneyin.",
-    "userNotFoundError": "Kullanıcı bulunamadı."
+    "userNotFoundError": "Kullanıcı bulunamadı.",
+    "login": "Giriş Yap"
 }
