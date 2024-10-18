@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/Button";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
+import { login } from "./api";
 
 export function Login() {
   //getValue();
@@ -57,15 +58,15 @@ export function Login() {
     event.preventDefault(); //formdan gelen event'i alır ve tarayıcının işlmesini önler böylelikle form submit olunca tarayıcadaki sayfa yenilenmez.!
     setValue(1);
     setGeneralError();
-    setSuccessMessage();
+    //setSuccessMessage();
     setApiProgress(true);
 
     try {
-      const response = await signUp({ username, email, password });
+      /*const response = await signUp({ username, email, password });
       setSuccessMessage(response.data.message);
-      console.log(response.data.message);
+      console.log(response.data.message);*/
+      await login({ email, password })
     } catch (axiosError) {
-      console.log(axiosError);
       if (axiosError.response?.data) {
         if (axiosError.response.data.status === 400) {
           setErrors(axiosError.response.data.validationErrors);
@@ -75,7 +76,6 @@ export function Login() {
       } else {
         setGeneralError(t("genericError"));
       }
-      //setSuccessMessage(undefined);
     } finally {
       setApiProgress(false);
     }
