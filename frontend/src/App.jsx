@@ -4,6 +4,8 @@ import { LanguageSelector } from "./shared/components/LanguageSelector";
 import { useTranslation } from "react-i18next";
 import { NavBar } from "./shared/components/NavBar";
 import { AuthenticationContext } from "./shared/state/context";
+import { Provider } from "react-redux";
+import { store } from "./shared/state/redux";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,7 +21,9 @@ function App() {
 
   return (
     <>
-      <AuthenticationContext> {/*AuthenticationContext ile alt komponentleri sarmaladık. Alt komponentler artık üstten veri alabilecek.*/}
+      {/*<AuthenticationContext>*/}{" "}
+      {/*AuthenticationContext ile alt komponentleri sarmaladık. Alt komponentler artık üstten veri alabilecek.*/}
+      <Provider store={store}>
         <NavBar />
         <div className="container mt-3">
           {/*
@@ -31,7 +35,8 @@ function App() {
           <Outlet />
           <LanguageSelector />
         </div>
-      </AuthenticationContext>
+      </Provider>
+      {/*</AuthenticationContext>*/}
     </>
   );
 }

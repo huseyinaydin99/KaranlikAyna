@@ -10,7 +10,9 @@ import { useEffect, useState } from "react";
 import { AuthContext } from "@/shared/state/context";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAuthDispatch } from "@/shared/state/context";
+//import { useAuthDispatch } from "@/shared/state/context";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "@/shared/state/redux";
 
 export function Login() {
   const authState = useContext(AuthContext);
@@ -24,7 +26,8 @@ export function Login() {
   const [generalError, setGeneralError] = useState();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAuthDispatch();
+  // const dispatch = useAuthDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setErrors(function (lastError) {
@@ -75,7 +78,11 @@ export function Login() {
       console.log(response.data.message);*/
       const response = await login({ email, password })
       //authState.onLoginSuccess(response.data.user)
-      dispatch({type: 'login-success', data: response.data.user})
+      // dispatch({type: 'login-success', data: response.data.user})
+      dispatch(loginSuccess(response.data.user)) 
+      /*
+      dispatch(loginSuccess(response.data.user)), Redux store'daki loginSuccess eylemini (action) tetikler ve response.data.user ile gelen kullanıcı verilerini store'a kaydeder. Bu şekilde, kullanıcı oturum açtığında veriler store'a işlenmiş olur.
+      */
       navigate("/")
     } catch (axiosError) {
       if (axiosError.response?.data) {

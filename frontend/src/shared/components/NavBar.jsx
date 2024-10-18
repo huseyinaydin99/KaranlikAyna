@@ -2,15 +2,26 @@ import logo from "@/assets/karanlikayna.png";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../state/context";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../state/redux";
 
 export function NavBar() {
   const { t } = useTranslation();
-  const authState = useAuthState();
-  const dispatch = useAuthDispatch();
+  // const authState = useAuthState();
+  // const dispatch = useAuthDispatch();
+  const authState = useSelector((store) => store.auth);
+  /*
+   const authState = useSelector((store) => store.auth);
+   ifadesi, Redux store'daki auth dilimindeki (slice) durumu alır ve bu durumu authState değişkenine atar. Yani, Redux store'da bulunan kullanıcı oturum durumunu (örneğin, kullanıcı bilgileri) React bileşeni içinde kullanmanı sağlar.
+  
+  Yani istediğimiz alt veya üst komponentden drill yapmadan redux storeden useSelector ile kimlik bilgileri çekilebilir
+   */
+  const dispatch = useDispatch();
 
   const onClickLogout = () => {
     //authState.onLogoutSuccess();
-    dispatch({type: 'logout-success'});
+    //dispatch({type: 'logout-success'});
+    dispatch(logoutSuccess());
   }
 
   return (
