@@ -3,17 +3,25 @@ import logo from "./assets/karanlikayna.png";
 import { LanguageSelector } from "./shared/components/LanguageSelector";
 import { useTranslation } from "react-i18next";
 import { NavBar } from "./shared/components/NavBar";
+import { Login } from "./pages/Login";
+import { useState } from "react";
 
 function App() {
   const [count, setCount] = useState(0)
 
   const { t } = useTranslation();
 
+  const [authState, setAuthState] = useState({
+    id: 0
+  })
+  const onLoginSuccess = (data) => {
+    setAuthState(data)
+  }
+
   return (
     <>
-      <NavBar />
+      <NavBar authState={authState} />
       <div className="container mt-3">
-        <Outlet />
         {
           /*
           React Router'da <Outlet /> bir "placeholder" gibidir. 
@@ -22,6 +30,8 @@ function App() {
           Kısaca, alt bileşenlerin (child components) geleceği yerdir.
           */
         }
+        <Login onLoginSuccess={onLoginSuccess} />
+        {/* <Outlet /> */}
         <LanguageSelector />
       </div>
     </>

@@ -2,7 +2,7 @@ import logo from "@/assets/karanlikayna.png";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-export function NavBar() {
+export function NavBar({ authState }) {
   const { t } = useTranslation();
   return (
     <nav className="navbar navbar-expand bg-body-tertiary shadow-sm">
@@ -12,16 +12,32 @@ export function NavBar() {
           Hoaxify
         </Link>
         <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link className="nav-link" to="/login">
-              {t("login")}
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/signup">
-              {t("signUp")}
-            </Link>
-          </li>
+        {authState.id === 0 && ( //login olmama durumu
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/Login">
+                  {t("login")}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/signup">
+                  {t("signUp")}
+                </Link>
+              </li>
+            </>
+          )}
+          {authState.id > 0 && ( //login olma durumu
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to={`/user/${authState.id}`}>
+                  Profilim
+                </Link>
+              </li>
+              <li className="nav-item">
+                <span className="nav-link" role="button">Çıkış</span>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

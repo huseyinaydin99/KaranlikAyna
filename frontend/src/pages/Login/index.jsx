@@ -7,7 +7,7 @@ import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
 import { login } from "./api";
 
-export function Login() {
+export function Login({onLoginSuccess}) {
   //getValue();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -65,7 +65,8 @@ export function Login() {
       /*const response = await signUp({ username, email, password });
       setSuccessMessage(response.data.message);
       console.log(response.data.message);*/
-      await login({ email, password })
+      const response = await login({ email, password })
+      onLoginSuccess(response.data.user)
     } catch (axiosError) {
       if (axiosError.response?.data) {
         if (axiosError.response.data.status === 400) {
