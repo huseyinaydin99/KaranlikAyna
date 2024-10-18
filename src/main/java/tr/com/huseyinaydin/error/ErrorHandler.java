@@ -20,70 +20,39 @@ import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<?> handleAuthenticationException(AuthenticationException exception){
-        ApiError error = new ApiError();
-        error.setPath("/api/v1/auth");
-        error.setStatus(401);
-        error.setMessage(exception.getMessage());
-        return ResponseEntity.status(401).body(error);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception){
-        ApiError apiError = new ApiError();
-        apiError.setPath("/api/v1/users");
-        String message = Messages.getMessageForLocale("KaranlikAyna.error.validation", LocaleContextHolder.getLocale());
-        apiError.setMessage(message);
-        apiError.setStatus(400);
-        /*Map<String, String> validationErrors = new HashMap<>();
-        for(var filedError: exception.getBindingResult().getFieldErrors()){
-            validationErrors.put(filedError.getField(), filedError.getDefaultMessage());
-        }*/
-        var validationErrors = exception.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
-            FieldError::getField,
-            FieldError::getDefaultMessage, (existing, replacing) -> existing));
-        apiError.setValidationErrors(validationErrors);
-        return ResponseEntity.badRequest().body(apiError);
-    }
-
-    @ExceptionHandler(NotUniqueEmailException.class)
-    //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handleNotUniqueEmailEx(NotUniqueEmailException exception){
-        ApiError apiError = new ApiError();
-        apiError.setPath("/api/v1/users");
-        apiError.setMessage(exception.getMessage());
-        apiError.setStatus(400);
-        apiError.setValidationErrors(exception.getValidationErrors());
-        return ResponseEntity.status(400).body(apiError);
-    }
-
-    @ExceptionHandler(ActivationNotificationException.class)
-    public ResponseEntity<ApiError> handleActivationNotificationException(ActivationNotificationException exception){
-        ApiError apiError = new ApiError();
-        apiError.setPath("/api/v1/users");
-        apiError.setMessage(exception.getMessage());
-        apiError.setStatus(502);
-        return ResponseEntity.status(502).body(apiError);
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ApiError> handleInvalidTokenException(InvalidTokenException exception, HttpServletRequest request){
-        ApiError apiError = new ApiError();
-        apiError.setPath("/api/v1/users");
-        apiError.setPath(request.getRequestURI());
-        apiError.setMessage(exception.getMessage());
-        apiError.setStatus(400);
-        return ResponseEntity.status(400).body(apiError);
-    }
-
-    public @ExceptionHandler(NotFoundException.class)
-    ResponseEntity<ApiError> handleNotFoundException(NotFoundException exception, HttpServletRequest request){
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            NotUniqueEmailException.class,
+            ActivationNotificationException.class,
+            InvalidTokenException.class,
+            NotFoundException.class,
+            AuthenticationException.class
+    })
+    public ResponseEntity<?> handleException(Exception exception, HttpServletRequest request) {
         ApiError apiError = new ApiError();
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(exception.getMessage());
-        apiError.setStatus(404);
-        return ResponseEntity.status(404).body(apiError);
+        if (exception instanceof MethodArgumentNotValidException) {
+            String message = Messages.getMessageForLocale("KaranlikAyna.error.validation",
+                    LocaleContextHolder.getLocale());
+            apiError.setMessage(message);
+            apiError.setStatus(400);
+            var validationErrors = ((MethodArgumentNotValidException) exception).getBindingResult().getFieldErrors()
+                    .stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage,
+                            (existing, replacing) -> existing));
+            apiError.setValidationErrors(validationErrors);
+        } else if (exception instanceof NotUniqueEmailException) {
+            apiError.setStatus(400);
+            apiError.setValidationErrors(((NotUniqueEmailException) exception).getValidationErrors());
+        } else if (exception instanceof ActivationNotificationException) {
+            apiError.setStatus(502);
+        } else if (exception instanceof InvalidTokenException) {
+            apiError.setStatus(400);
+        } else if (exception instanceof NotFoundException) {
+            apiError.setStatus(404);
+        } else if (exception instanceof AuthenticationException) {
+            apiError.setStatus(401);
+        }
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
 }
