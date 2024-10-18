@@ -1,14 +1,16 @@
 import logo from "@/assets/karanlikayna.png";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useAuthDispatch, useAuthState } from "../state/context";
 
 export function NavBar() {
   const { t } = useTranslation();
-  const authState = useContext(AuthContext)
+  const authState = useAuthState();
+  const dispatch = useAuthDispatch();
 
   const onClickLogout = () => {
-    authState.onLogoutSuccess();
+    //authState.onLogoutSuccess();
+    dispatch({type: 'logout-success'});
   }
 
   return (

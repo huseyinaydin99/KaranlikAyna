@@ -6,9 +6,11 @@ import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Spinner } from "@/shared/components/Spinner";
 import { login } from "./api";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "@/shared/state/context";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuthDispatch } from "@/shared/state/context";
 
 export function Login() {
   const authState = useContext(AuthContext);
@@ -22,6 +24,7 @@ export function Login() {
   const [generalError, setGeneralError] = useState();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAuthDispatch();
 
   useEffect(() => {
     setErrors(function (lastError) {
@@ -71,7 +74,8 @@ export function Login() {
       setSuccessMessage(response.data.message);
       console.log(response.data.message);*/
       const response = await login({ email, password })
-      authState.onLoginSuccess(response.data.user)
+      //authState.onLoginSuccess(response.data.user)
+      dispatch({type: 'login-success', data: response.data.user})
       navigate("/")
     } catch (axiosError) {
       if (axiosError.response?.data) {
