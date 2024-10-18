@@ -79,7 +79,8 @@ export function Login() {
       const response = await login({ email, password })
       //authState.onLoginSuccess(response.data.user)
       // dispatch({type: 'login-success', data: response.data.user})
-      dispatch(loginSuccess(response.data.user)) 
+      //dispatch(loginSuccess(response.data.user)) 
+      dispatch({type: 'login-success', data: response.data})
       /*
       dispatch(loginSuccess(response.data.user)), Redux store'daki loginSuccess eylemini (action) tetikler ve response.data.user ile gelen kullanıcı verilerini store'a kaydeder. Bu şekilde, kullanıcı oturum açtığında veriler store'a işlenmiş olur.
       */
