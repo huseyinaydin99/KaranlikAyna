@@ -26,41 +26,6 @@ public class AppUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(email + " ile kayıtlı bir kullanıcı bulunmamakta.");
         }
 
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return AuthorityUtils.createAuthorityList("ROLE_USER");
-            }
-
-            @Override
-            public String getPassword() {
-                return inDB.getPassword();
-            }
-
-            @Override
-            public String getUsername() {
-                return inDB.getUsername();
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return true;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
+        return new CurrentUser(inDB);
     }
 }
