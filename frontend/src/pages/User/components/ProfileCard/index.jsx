@@ -8,6 +8,7 @@ import { updateUser } from "./api";
 import { Input } from "@/shared/components/Input";
 import { useAuthDispatch, useAuthState } from "@/shared/state/context";
 import { Alert } from "@/shared/components/Alert";
+import { ProfileImage } from "@/shared/components/ProfileImage";
 
 export function ProfileCard({ user }) {
   //const authState = useContext(AuthContext);
@@ -66,11 +67,7 @@ export function ProfileCard({ user }) {
   return (
     <div className="card">
       <div className="card-header text-center">
-        <img
-          src={defaultProfileImage}
-          width="200"
-          className="img-fluid rounded-circle shadow-sm"
-        />
+        <ProfileImage width={200} />
       </div>
       <div className="card-body text-center">
         {!editMode && <span className="fs-3 d-block">{visibleUsername}</span>}

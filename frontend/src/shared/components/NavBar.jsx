@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../state/context";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../state/redux";
+import { ProfileImage } from "./ProfileImage";
 
 export function NavBar() {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export function NavBar() {
     //authState.onLogoutSuccess();
     //dispatch({type: 'logout-success'});
     dispatch(logoutSuccess());
-  }
+  };
 
   return (
     <nav className="navbar navbar-expand bg-body-tertiary shadow-sm">
@@ -32,7 +33,7 @@ export function NavBar() {
           Hoaxify
         </Link>
         <ul className="navbar-nav">
-        {authState.id === 0 && ( //login olmama durumu
+          {authState.id === 0 && ( //login olmama durumu
             <>
               <li className="nav-item">
                 <Link className="nav-link" to="/Login">
@@ -50,11 +51,18 @@ export function NavBar() {
             <>
               <li className="nav-item">
                 <Link className="nav-link" to={`/user/${authState.id}`}>
-                  Profilim
+                  <ProfileImage width={30} />
+                  <span className="ms-1">{authState.username}</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <span className="nav-link" role="button" onClick={onClickLogout}>Çıkış</span>
+                <span
+                  className="nav-link"
+                  role="button"
+                  onClick={onClickLogout}
+                >
+                  Çıkış
+                </span>
               </li>
             </>
           )}
