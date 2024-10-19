@@ -16,7 +16,8 @@ public class BasicAuthTokenService implements TokenService {
     @Autowired
     UserService userService;
 
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Token createToken(User user, Credentials creds) {

@@ -22,8 +22,8 @@ public class KaranlikAynaApplication {
 
 	@Bean
 	@Profile("dev")
-	public CommandLineRunner userCreator(UserRepository userRepository) {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	public CommandLineRunner userCreator(UserRepository userRepository, PasswordEncoder passwordEncoder){
+		//PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //artık new'lemeye gerek yok IoC'dan DI parametreden alıyorum. Aslında bu yönteme metot enjeksiyonu deniyor.
 		return (args) -> {
 			for (var i = 1; i <= 25; i++) {
 				User user = new User();

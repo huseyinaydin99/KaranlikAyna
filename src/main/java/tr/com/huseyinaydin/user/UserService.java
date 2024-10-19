@@ -32,7 +32,8 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(rollbackOn = MailException.class)
     public void save(User user){

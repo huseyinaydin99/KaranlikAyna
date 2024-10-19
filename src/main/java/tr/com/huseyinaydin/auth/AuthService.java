@@ -19,7 +19,8 @@ public class AuthService {
     @Autowired
     UserService userService;
 
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public TokenService tokenService;

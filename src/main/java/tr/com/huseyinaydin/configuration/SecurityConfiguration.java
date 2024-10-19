@@ -20,9 +20,12 @@ public class SecurityConfiguration {
             authentication.requestMatchers(AntPathRequestMatcher.antMatcher("/secured")).authenticated()
             .anyRequest().permitAll()
         );
-        
+
         http.httpBasic(Customizer.withDefaults());
         http.csrf(csrf -> csrf.disable());
+
+        http.headers(headers -> headers.disable()); //H2 database'in sorununu giderir.
+
         return http.build();
     }
 
