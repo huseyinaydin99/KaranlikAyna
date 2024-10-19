@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import tr.com.huseyinaydin.auth.token.TokenService;
 import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
@@ -39,6 +41,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @CrossOrigin
     @PostMapping("/api/v1/users")
     public GenericMessage createUser(@Valid @RequestBody UserCreate user) {
@@ -56,12 +61,13 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/users")
-    public Page<UserDTO> getUsers(Pageable page){
-        return userService.getUsers(page).map(UserDTO::new);
+    public Page<UserDTO> getUsers(Pageable page, @RequestHeader(name="Authorization", required = false) String authorizationHeader){
+        var loggedInUser = tokenService.verifyToken(authorizationHeader);
+        return userService.getUsers(page, loggedInUser).map(UserDTO::new);
     }
 
     @GetMapping("/api/v1/users/{id}")
-    UserDTO getUserById(@PathVariable long id){
+    public UserDTO getUserById(@PathVariable long id){
         return new UserDTO(userService.getUser(id));
     }
 }
