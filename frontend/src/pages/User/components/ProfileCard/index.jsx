@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { updateUser } from "./api";
 import { Input } from "@/shared/components/Input";
+import { useAuthDispatch, useAuthState } from "@/shared/state/context";
+import { Alert } from "@/shared/components/Alert";
 
 export function ProfileCard({ user }) {
   //const authState = useContext(AuthContext);
@@ -14,24 +16,52 @@ export function ProfileCard({ user }) {
 
   const [editMode, setEditMode] = useState(false);
   const { t } = useTranslation();
-  const [newUsername, setNewUsername] = useState();
+  const [newUsername, setNewUsername] = useState(authState.username);
   const [apiProgress, setApiProgress] = useState(false);
+
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState();
+  const dispatch = useAuthDispatch();
 
   const onChangeUsername = (event) => {
     setNewUsername(event.target.value);
+    setErrors({});
+  };
+
+  const onClickCancel = () => {
+    setEditMode(false);
+    setNewUsername(authState.username);
   };
 
   const onClickSave = async () => {
     setApiProgress(true);
+    setErrors({});
+    setGeneralError();
     try {
       await updateUser(user.id, { username: newUsername });
-    } catch {
+      dispatch({
+        type: "user-update-success",
+        data: { username: newUsername },
+      });
+      setEditMode(false);
+    } catch (axiosError) {
+      if (axiosError.response?.data) {
+        if (axiosError.response.data.status === 400) {
+          setErrors(axiosError.response.data.validationErrors);
+        } else {
+          setGeneralError(axiosError.response.data.message);
+        }
+      } else {
+        setGeneralError(t("genericError"));
+      }
     } finally {
       setApiProgress(false);
     }
   };
 
   const isEditButtonVisible = !editMode && authState.id === user.id;
+  const visibleUsername =
+    authState.id === user.id ? authState.username : user.username;
 
   return (
     <div className="card">
@@ -43,7 +73,7 @@ export function ProfileCard({ user }) {
         />
       </div>
       <div className="card-body text-center">
-        {!editMode && <span className="fs-3 d-block">{user.username}</span>}
+        {!editMode && <span className="fs-3 d-block">{visibleUsername}</span>}
         {isEditButtonVisible && (
           <Button onClick={() => setEditMode(true)}>Edit</Button>
         )}
@@ -51,17 +81,15 @@ export function ProfileCard({ user }) {
           <>
             <Input
               label={t("username")}
-              defaultValue={user.username}
+              defaultValue={visibleUsername}
               onChange={onChangeUsername}
             />
+            {generalError && <Alert styleType="danger">{generalError}</Alert>}
             <Button apiProgress={apiProgress} onClick={onClickSave}>
               Kaydet
             </Button>
             <div className="d-inline m-1"></div>
-            <Button
-              styleType="outline-secondary"
-              onClick={() => setEditMode(false)}
-            >
+            <Button styleType="outline-secondary" onClick={onClickCancel}>
               İptal
             </Button>
           </>
