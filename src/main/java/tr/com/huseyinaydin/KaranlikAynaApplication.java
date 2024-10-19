@@ -3,7 +3,7 @@ package tr.com.huseyinaydin;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+//import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import tr.com.huseyinaydin.user.User;
 import tr.com.huseyinaydin.user.UserRepository;
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
+/*(exclude = SecurityAutoConfiguration.class)*/ //spring security artık devrede. devre dışı olayını kaldırdım.
 public class KaranlikAynaApplication {
 
 	public static void main(String[] args) {
