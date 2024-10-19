@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import jakarta.validation.Valid;
@@ -84,6 +85,7 @@ public class UserController {
     }
 
     @PutMapping("/api/v1/users/{id}")
+    @PreAuthorize("#id == principal.id")
     // public UserDTO updateUser(@PathVariable long id, @Valid @RequestBody
     // UserUpdate userUpdate, @RequestHeader(name="Authorization", required = false)
     // String authorizationHeader){
