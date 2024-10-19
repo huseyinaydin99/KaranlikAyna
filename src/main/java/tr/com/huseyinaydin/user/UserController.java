@@ -94,9 +94,9 @@ public class UserController {
 
         // if(loggedInUser == null || loggedInUser.getId() != id) { //farkı bir
         // kullanıcıyı güncellemeyi önlemek.
-        if (currentUser.getId() != id) { // farkı bir kullanıcıyı güncellemeyi önlemek.
+        /*if (currentUser.getId() != id) { // farkı bir kullanıcıyı güncellemeyi önlemek.
             throw new AuthorizationException();
-        }
+        }*/
         return new UserDTO(userService.updateUser(id, userUpdate));
     }
 }
