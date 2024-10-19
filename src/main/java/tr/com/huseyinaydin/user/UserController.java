@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,9 @@ import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
 import tr.com.huseyinaydin.user.dto.UserCreate;
 import tr.com.huseyinaydin.user.dto.UserDTO;
+import tr.com.huseyinaydin.user.dto.UserUpdate;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
+import tr.com.huseyinaydin.user.exception.AuthorizationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotFoundException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
@@ -69,5 +72,14 @@ public class UserController {
     @GetMapping("/api/v1/users/{id}")
     public UserDTO getUserById(@PathVariable long id){
         return new UserDTO(userService.getUser(id));
+    }
+
+    @PutMapping("/api/v1/users/{id}")
+    public UserDTO updateUser(@PathVariable long id, @Valid @RequestBody UserUpdate userUpdate, @RequestHeader(name="Authorization", required = false) String authorizationHeader){
+        var loggedInUser = tokenService.verifyToken(authorizationHeader);
+        if(loggedInUser == null || loggedInUser.getId() != id) { //farkı bir kullanıcıyı güncellemeyi önlemek.
+            throw new AuthorizationException();
+        }
+        return new UserDTO(userService.updateUser(id, userUpdate));
     }
 }

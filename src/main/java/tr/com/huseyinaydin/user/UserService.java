@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.email.EmailService;
+import tr.com.huseyinaydin.user.dto.UserUpdate;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotFoundException;
@@ -72,5 +73,11 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User updateUser(long id, UserUpdate userUpdate) {
+        User inDB = getUser(id);
+        inDB.setUsername(userUpdate.username());
+        return userRepository.save(inDB);
     }
 }

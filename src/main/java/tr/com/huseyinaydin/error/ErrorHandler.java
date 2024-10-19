@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import tr.com.huseyinaydin.auth.exception.AuthenticationException;
 import tr.com.huseyinaydin.shared.Messages;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
+import tr.com.huseyinaydin.user.exception.AuthorizationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotFoundException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;
@@ -26,7 +27,9 @@ public class ErrorHandler {
             ActivationNotificationException.class,
             InvalidTokenException.class,
             NotFoundException.class,
-            AuthenticationException.class
+            AuthenticationException.class,
+            AuthenticationException.class,
+            AuthorizationException.class
     })
     public ResponseEntity<?> handleException(Exception exception, HttpServletRequest request) {
         ApiError apiError = new ApiError();
@@ -52,6 +55,8 @@ public class ErrorHandler {
             apiError.setStatus(404);
         } else if (exception instanceof AuthenticationException) {
             apiError.setStatus(401);
+        } else if (exception instanceof AuthorizationException) {
+            apiError.setStatus(403);
         }
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
