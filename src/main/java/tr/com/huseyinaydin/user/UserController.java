@@ -33,7 +33,6 @@ import tr.com.huseyinaydin.user.dto.UserCreate;
 import tr.com.huseyinaydin.user.dto.UserDTO;
 import tr.com.huseyinaydin.user.dto.UserUpdate;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
-import tr.com.huseyinaydin.user.exception.AuthorizationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
 import tr.com.huseyinaydin.user.exception.NotFoundException;
 import tr.com.huseyinaydin.user.exception.NotUniqueEmailException;

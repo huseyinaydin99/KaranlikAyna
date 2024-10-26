@@ -23,9 +23,14 @@ public class SecurityConfiguration {
                 .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.PUT, "/api/v1/users/{id}")).authenticated()
                 .anyRequest().permitAll());
 
-        http.httpBasic(Customizer.withDefaults());
-        http.csrf(csrf -> csrf.disable());
+        //http.httpBasic(Customizer.withDefaults()); 
 
+
+        //Bu kod, uygulamada HTTP Basic kimlik doğrulamasını ayarlıyor.
+        //Ayrıca, AuthEntryPoint ile kimlik doğrulamada bir sorun olduğunda, özel bir hata mesajı göstermemi sağlıyor.
+        http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(new AuthEntryPoint()));
+
+        http.csrf(csrf -> csrf.disable());
         http.headers(headers -> headers.disable()); // H2 database'in sorununu giderir.
 
         return http.build();

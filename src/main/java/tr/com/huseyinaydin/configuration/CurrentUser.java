@@ -11,11 +11,13 @@ public class CurrentUser implements UserDetails {
     long id;
     String username;
     String password;
+    boolean enabled;
 
     public CurrentUser(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.enabled = user.isActive();
     }
 
     public long getId() {
@@ -58,6 +60,6 @@ public class CurrentUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
