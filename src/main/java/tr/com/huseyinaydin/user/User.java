@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 /**import jakarta.validation.constraints.Email;
@@ -38,12 +39,13 @@ public class User {
     private String passwordRepeat;
 
     @JsonIgnore
-    boolean active = false;
+    private boolean active = false;
     
     @JsonIgnore
-    String activationToken;
+    private String activationToken;
 
-    String image;
+    @Lob
+    private String image;
     /*String firstName;
     String lastName;
 
@@ -125,5 +127,7 @@ public class User {
 
     public void setPasswordRepeat(String passwordRepeat) {
         this.passwordRepeat = passwordRepeat;
-    }   
+    }
+
+
 }
