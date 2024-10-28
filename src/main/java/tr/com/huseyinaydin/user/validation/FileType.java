@@ -11,7 +11,8 @@ import jakarta.validation.Payload;
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FileType {
-    String message() default "JPG veya PNG olmak zorundadır.";
+    String message() default "{types} olmak zorundadır.";
 	Class<?>[] groups() default { };
 	Class<? extends Payload>[] payload() default { };
+	String[] types();
 }
