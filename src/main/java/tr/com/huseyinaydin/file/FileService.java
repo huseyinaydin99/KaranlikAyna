@@ -14,9 +14,12 @@ import tr.com.huseyinaydin.configuration.KaranlikAynaProperties;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.tika.Tika;
 
 @Service
 public class FileService {
+
+    Tika tika = new Tika();
 
     @Autowired
     private KaranlikAynaProperties karanlikAynaProperties;
@@ -26,13 +29,22 @@ public class FileService {
         Path path = Paths.get(karanlikAynaProperties.getStorage().getRoot(), karanlikAynaProperties.getStorage().getProfile(), filename);
         try {
             OutputStream outputStream = new FileOutputStream(path.toFile());
-            byte[] base64decoded = Base64.getDecoder().decode(image.split(",")[1]);
-            outputStream.write(base64decoded);
+            /*byte[] base64decoded = Base64.getDecoder().decode(image.split(",")[1]);
+            outputStream.write(base64decoded);*/
+            outputStream.write(decodedImage(image));
             outputStream.close();
             return filename;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String detectType(String value) {
+        return tika.detect(decodedImage(value)); //dosya uzantısını tespit et.
+    }
+
+    private byte[] decodedImage(String encodedImage) {
+        return Base64.getDecoder().decode(encodedImage.split(",")[1]);
     }
 }
