@@ -15,6 +15,7 @@ import tr.com.huseyinaydin.configuration.KaranlikAynaProperties;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.tika.Tika;
+import java.nio.file.Files;
 
 @Service
 public class FileService {
@@ -26,7 +27,7 @@ public class FileService {
 
     public String saveBase64StringAsFile(String image) {
         String filename = UUID.randomUUID().toString();
-        Path path = Paths.get(karanlikAynaProperties.getStorage().getRoot(), karanlikAynaProperties.getStorage().getProfile(), filename);
+        Path path = getProfileImagePath(filename);
         try {
             OutputStream outputStream = new FileOutputStream(path.toFile());
             /*byte[] base64decoded = Base64.getDecoder().decode(image.split(",")[1]);
@@ -46,5 +47,19 @@ public class FileService {
 
     private byte[] decodedImage(String encodedImage) {
         return Base64.getDecoder().decode(encodedImage.split(",")[1]);
+    }
+
+    public void deleteProfileImage(String image) {
+        if(image == null) return;
+        Path path = getProfileImagePath(image);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Path getProfileImagePath(String filename){
+        return Paths.get(karanlikAynaProperties.getStorage().getRoot(), karanlikAynaProperties.getStorage().getProfile(), filename);
     }
 }
