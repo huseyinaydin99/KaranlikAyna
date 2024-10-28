@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.configuration.CurrentUser;
 import tr.com.huseyinaydin.email.EmailService;
+import tr.com.huseyinaydin.file.FileService;
 import tr.com.huseyinaydin.user.dto.UserUpdate;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
@@ -35,6 +36,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FileService fileService;
 
     @Transactional(rollbackOn = MailException.class)
     public void save(User user){
@@ -81,7 +85,8 @@ public class UserService {
         User inDB = getUser(id);
         inDB.setUsername(userUpdate.username());
         if(userUpdate.image() != null) {
-            inDB.setImage(userUpdate.image());
+            String fileName = fileService.saveBase64StringAsFile(userUpdate.image());
+            inDB.setImage(fileName);
         }
         return userRepository.save(inDB);
     }
