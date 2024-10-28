@@ -6,7 +6,7 @@ import { Input } from "@/shared/components/Input";
 import { Alert } from "@/shared/components/Alert";
 import { Button } from "@/shared/components/Button";
 
-export function UserEditForm({ setEditMode }) {
+export function UserEditForm({ setEditMode, setTempImage }) {
   const authState = useAuthState();
   const { t } = useTranslation();
   const [newUsername, setNewUsername] = useState(authState.username);
@@ -23,7 +23,22 @@ export function UserEditForm({ setEditMode }) {
   const onClickCancel = () => {
     setEditMode(false);
     setNewUsername(authState.username);
+
+    setNewImage();
+    setTempImage();
   };
+
+  const onSelectImage = (event) => {
+    if(event.target.files.length < 1) return;
+    const file = event.target.files[0]
+    const fileReader = new FileReader();
+    fileReader.onloadend = () => {
+      const data = fileReader.result
+      setNewImage(data);
+      setTempImage(data);
+    }
+    fileReader.readAsDataURL(file);
+  }
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -31,7 +46,7 @@ export function UserEditForm({ setEditMode }) {
     setErrors({});
     setGeneralError();
     try {
-      await updateUser(authState.id, { username: newUsername });
+      await updateUser(authState.id, { username: newUsername, image: newImage });
       dispatch({
         type: "user-update-success",
         data: { username: newUsername },
@@ -54,6 +69,11 @@ export function UserEditForm({ setEditMode }) {
 
   return (
     <form onSubmit={onSubmit}>
+      <Input
+        label="Profile Image"
+        type="file"
+        onChange={onSelectImage}
+      />
       <Input
         label={t("username")}
         defaultValue={authState.username}
