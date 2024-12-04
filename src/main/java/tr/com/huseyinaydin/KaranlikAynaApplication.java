@@ -13,7 +13,7 @@ import tr.com.huseyinaydin.user.User;
 import tr.com.huseyinaydin.user.UserRepository;
 
 @SpringBootApplication
-/*(exclude = SecurityAutoConfiguration.class)*/ //spring security artık devrede. devre dışı olayını kaldırdım.
+/* (exclude = SecurityAutoConfiguration.class) */ // spring security artık devrede. devre dışı olayını kaldırdım.
 public class KaranlikAynaApplication {
 
 	public static void main(String[] args) {
@@ -22,21 +22,39 @@ public class KaranlikAynaApplication {
 
 	@Bean
 	@Profile("dev")
-	public CommandLineRunner userCreator(UserRepository userRepository, PasswordEncoder passwordEncoder){
-		//PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //artık new'lemeye gerek yok IoC'dan DI parametreden alıyorum. Aslında bu yönteme metot enjeksiyonu deniyor.
+	public CommandLineRunner userCreator(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		// PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //artık
+		// new'lemeye gerek yok IoC'dan DI parametreden alıyorum. Aslında bu yönteme
+		// metot enjeksiyonu deniyor.
 		return (args) -> {
+			/*
+			 * for (var i = 1; i <= 25; i++) {
+			 * User user = new User();
+			 * user.setUsername("user" + i);
+			 * user.setEmail("user" + i + "@mail.com");
+			 * user.setPassword(passwordEncoder.encode("P4ssword"));
+			 * //user.setActive(i != 1);
+			 * user.setActive(true);
+			 * /*user.setFirstName("first" + i);
+			 * user.setLastName("last" + i);
+			 * if (i == 1) {
+			 * user.setImage("my-profile-image.png");
+			 * }
+			 */
+			/*
+			 * userRepository.save(user);
+			 * }
+			 */
+
+			var userInDB = userRepository.findByEmail("user1@mail.com");
+			if (userInDB != null)
+				return;
 			for (var i = 1; i <= 25; i++) {
 				User user = new User();
 				user.setUsername("user" + i);
 				user.setEmail("user" + i + "@mail.com");
 				user.setPassword(passwordEncoder.encode("P4ssword"));
-				//user.setActive(i != 1);
 				user.setActive(true);
-				/*user.setFirstName("first" + i);
-				user.setLastName("last" + i);
-				if (i == 1) {
-					user.setImage("my-profile-image.png");
-				}*/
 				userRepository.save(user);
 			}
 		};
