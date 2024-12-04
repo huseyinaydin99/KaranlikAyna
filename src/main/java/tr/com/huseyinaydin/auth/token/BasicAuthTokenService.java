@@ -3,6 +3,7 @@ package tr.com.huseyinaydin.auth.token;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import tr.com.huseyinaydin.user.User;
 import tr.com.huseyinaydin.user.UserService;
 
 @Service
+@ConditionalOnProperty(name = "KaranlikAyna.token-type", havingValue = "basic")
 public class BasicAuthTokenService implements TokenService {
 
     @Autowired

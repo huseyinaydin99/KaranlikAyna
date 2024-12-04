@@ -1,6 +1,8 @@
 package tr.com.huseyinaydin.auth.token;
 
 import javax.crypto.SecretKey;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,8 @@ import io.jsonwebtoken.security.Keys;
 
 
 @Service
-@Primary
+//@Primary
+@ConditionalOnProperty(name = "KaranlikAyna.token-type", havingValue = "jwt")
 public class JwtTokenService implements TokenService{
 
     SecretKey key = Keys.hmacShaKeyFor("secret-must-be-at-least-32-chars".getBytes());
