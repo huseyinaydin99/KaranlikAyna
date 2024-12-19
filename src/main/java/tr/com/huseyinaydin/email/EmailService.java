@@ -26,18 +26,22 @@ public class EmailService {
     @Autowired
     private MessageSource messageSource;
 
-    /*public EmailService(){
-        this.initialize();
-    }*/
+    /*
+     * public EmailService(){
+     * this.initialize();
+     * }
+     */
 
-    @PostConstruct //hazırlayıcı metot çalıştıktan hemen sonra.
-    public void initialize(){
+    @PostConstruct // hazırlayıcı metot çalıştıktan hemen sonra.
+    public void initialize() {
         this.mailSender = new JavaMailSenderImpl();
         mailSender.setHost(karanlikAynaProperties.getEmail().host());
         mailSender.setPort(karanlikAynaProperties.getEmail().port());
         mailSender.setUsername(karanlikAynaProperties.getEmail().username());
         mailSender.setPassword(karanlikAynaProperties.getEmail().password());
-        //mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf-"); //hataya neden olması için koydum. MailException oluşsunda Transactional dipnotu çalışsın ve rollback etsin diye.
+        // mailSender.setPassword("FPC8Rgpy5A9n7Wk1jf-"); //hataya neden olması için
+        // koydum. MailException oluşsunda Transactional dipnotu çalışsın ve rollback
+        // etsin diye.
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.smtp.starttls.enable", "true");
     }
@@ -53,18 +57,21 @@ public class EmailService {
 
     public void sendActivationEmail(String email, String activationToken) {
         var activationUrl = karanlikAynaProperties.getClient().host() + "/activation/" + activationToken;
-        /*SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(karanlikAynaProperties.getEmail().from());
-        message.setTo(email);
-        message.setSubject("Account Activation");
-        message.setText(activationUrl);
-        this.mailSender.send(message);*/
-        var title = messageSource.getMessage("KaranlikAyna.mail.user.created.title", null, LocaleContextHolder.getLocale());
+        /*
+         * SimpleMailMessage message = new SimpleMailMessage();
+         * message.setFrom(karanlikAynaProperties.getEmail().from());
+         * message.setTo(email);
+         * message.setSubject("Account Activation");
+         * message.setText(activationUrl);
+         * this.mailSender.send(message);
+         */
+        var title = messageSource.getMessage("KaranlikAyna.mail.user.created.title", null,
+                LocaleContextHolder.getLocale());
         var clickHere = messageSource.getMessage("KaranlikAyna.mail.click.here", null, LocaleContextHolder.getLocale());
         var mailBody = activationEmail
-            .replace("${url}", activationUrl)
-            .replace("${title}", title)
-            .replace("${clickHere}", clickHere);
+                .replace("${url}", activationUrl)
+                .replace("${title}", title)
+                .replace("${clickHere}", clickHere);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         try {
@@ -75,7 +82,27 @@ public class EmailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        
+
+        this.mailSender.send(mimeMessage);
+    }
+
+    public void sendPasswordResetEmail(String email, String passwordResetToken) {
+        String passwordResetUrl = karanlikAynaProperties.getClient().host() + "/password-reset/set?tk="
+                + passwordResetToken;
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        var title = "Şifre Sıfırlama";
+        var clickHere = messageSource.getMessage("KaranlikAyna.mail.click.here", null, LocaleContextHolder.getLocale());
+        var mailBody = activationEmail.replace("${url}", passwordResetUrl).replace("${title}", title)
+                .replace("${clickHere}", clickHere);
+        try {
+            message.setFrom(karanlikAynaProperties.getEmail().from());
+            message.setTo(email);
+            message.setSubject(title);
+            message.setText(mailBody, true);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         this.mailSender.send(mimeMessage);
     }
 }

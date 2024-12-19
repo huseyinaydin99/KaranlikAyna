@@ -30,6 +30,7 @@ import tr.com.huseyinaydin.configuration.CurrentUser;
 import tr.com.huseyinaydin.error.ApiError;
 import tr.com.huseyinaydin.shared.GenericMessage;
 import tr.com.huseyinaydin.shared.Messages;
+import tr.com.huseyinaydin.user.dto.PasswordResetRequest;
 import tr.com.huseyinaydin.user.dto.UserCreate;
 import tr.com.huseyinaydin.user.dto.UserDTO;
 import tr.com.huseyinaydin.user.dto.UserUpdate;
@@ -105,5 +106,11 @@ public class UserController {
     GenericMessage deleteUser(@PathVariable long id){
         userService.deleteUser(id);
         return new GenericMessage("Kullanıcı kaydınız silinmiştir. Yine bekleriz mübarek. (:");
+    }
+
+    @PostMapping("/api/v1/users/password-reset")
+    GenericMessage passwordResetRequest(@Valid @RequestBody PasswordResetRequest passwordResetRequest) {
+      userService.handleResetRequest(passwordResetRequest);
+      return new GenericMessage("Şifrenizi sıfırlamanız için e-posta adresinize gelen postayı kontrol ediniz.");
     }
 }

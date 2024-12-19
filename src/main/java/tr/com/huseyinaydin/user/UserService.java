@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import tr.com.huseyinaydin.configuration.CurrentUser;
 import tr.com.huseyinaydin.email.EmailService;
 import tr.com.huseyinaydin.file.FileService;
+import tr.com.huseyinaydin.user.dto.PasswordResetRequest;
 import tr.com.huseyinaydin.user.dto.UserUpdate;
 import tr.com.huseyinaydin.user.exception.ActivationNotificationException;
 import tr.com.huseyinaydin.user.exception.InvalidTokenException;
@@ -98,5 +99,13 @@ public class UserService {
             fileService.deleteProfileImage(inDB.getImage());
         }
         userRepository.delete(inDB);
+    }
+
+    public void handleResetRequest(PasswordResetRequest passwordResetRequest) {
+        User inDB = findByEmail(passwordResetRequest.email());
+        if(inDB == null) throw new NotFoundException(0);
+        inDB.setPasswordResetToken(UUID.randomUUID().toString());
+        this.userRepository.save(inDB);
+        this.emailService.sendPasswordResetEmail(inDB.getEmail(), inDB.getPasswordResetToken());
     }
 }
