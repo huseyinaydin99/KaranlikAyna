@@ -34,4 +34,8 @@ public class AuthService {
         authResponse.setUser(new UserDTO(inDB));
         return authResponse;
     }
+
+    public void logout(String authorizationHeader) {
+        tokenService.logout(authorizationHeader);
+    }
 }
