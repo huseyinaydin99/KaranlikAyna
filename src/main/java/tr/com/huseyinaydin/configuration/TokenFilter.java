@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class TokenFilter extends OncePerRequestFilter{
+public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
@@ -31,20 +31,37 @@ public class TokenFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null) {
-            User user = tokenService.verifyToken(authorizationHeader);
-            if(user != null) {
-                if(!user.isActive()) {
-                    exceptionResolver.resolveException(request, response, null, new DisabledException("Kullanıcı aktif değil."));
+        String tokenWithPrefix = getTokenWithPrefix(request);
+        if (tokenWithPrefix != null) {
+            User user = tokenService.verifyToken(tokenWithPrefix);
+            if (user != null) {
+                if (!user.isActive()) {
+                    exceptionResolver.resolveException(request, response, null,
+                            new DisabledException("Kullanıcı aktif değil."));
                     return;
                 }
                 CurrentUser currentUser = new CurrentUser(user);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        currentUser, null, currentUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String getTokenWithPrefix(HttpServletRequest request) {
+        var tokenWithPrefix = request.getHeader("Authorization");
+        var cookies = request.getCookies();
+        if (cookies == null)
+            return tokenWithPrefix;
+        for (var cookie : cookies) {
+            if (!cookie.getName().equals("karanlikayna-token"))
+                continue;
+            if (cookie.getValue() == null || cookie.getValue().isEmpty())
+                continue;
+            return "AnyPrefix " + cookie.getValue();
+        }
+        return tokenWithPrefix;
     }
 }

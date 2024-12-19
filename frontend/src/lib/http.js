@@ -1,21 +1,21 @@
 import axios from "axios";
 import { i18nInstance } from "@/locales";
-import { loadToken, storeToken } from "@/shared/state/storage";
+//import { loadToken, storeToken } from "@/shared/state/storage";
 
 const http = axios.create();
 
-let authToken = loadToken();
+/*let authToken = loadToken();
 
 export function setToken(token){
     authToken = token;
     storeToken(token);
-}
+}*/
 
 http.interceptors.request.use((config) => {
     config.headers["Accept-Language"] = i18nInstance.language //atılan isteği atılma esnasında yakalayıp ona header ekliyor. Tüm istekler Accept-Language=tr veya en olarak gönderiliyor.
-    if(authToken) {
+    /*if(authToken) {
         config.headers["Authorization"] = `${authToken.prefix} ${authToken.token}`
-    }
+    }*/
     return config;
 })
 

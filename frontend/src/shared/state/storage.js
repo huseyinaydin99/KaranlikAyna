@@ -1,4 +1,4 @@
-export function storeToken(token) {
+/*export function storeToken(token) {
   if (token) {
     localStorage.setItem("token", JSON.stringify(token));
   } else {
@@ -14,4 +14,4 @@ export function loadToken() {
   } catch {
     return null;
   }
-}
+}*/
