@@ -5,6 +5,7 @@ import { useAuthDispatch, useAuthState } from "../state/context";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../state/redux";
 import { ProfileImage } from "./ProfileImage";
+import { logout } from "./api";
 
 export function NavBar() {
   const { t } = useTranslation();
@@ -19,10 +20,16 @@ export function NavBar() {
    */
   const dispatch = useDispatch();
 
-  const onClickLogout = () => {
+  const onClickLogout = async () => {
     //authState.onLogoutSuccess();
     //dispatch({type: 'logout-success'});
-    dispatch(logoutSuccess());
+    //dispatch(logoutSuccess());
+    try {
+      await logout();
+    } catch {
+    } finally {
+      dispatch({ type: "logout-success" });
+    }
   };
 
   return (
@@ -51,7 +58,7 @@ export function NavBar() {
             <>
               <li className="nav-item">
                 <Link className="nav-link" to={`/user/${authState.id}`}>
-                  <ProfileImage width={30} image={authState.image}/>
+                  <ProfileImage width={30} image={authState.image} />
                   <span className="ms-1">{authState.username}</span>
                 </Link>
               </li>
