@@ -108,4 +108,15 @@ public class UserService {
         this.userRepository.save(inDB);
         this.emailService.sendPasswordResetEmail(inDB.getEmail(), inDB.getPasswordResetToken());
     }
+
+    public void updatePassword(String token, PasswordUpdate passwordUpdate) {
+        User inDB = userRepository.findByPasswordResetToken(token);
+        if(inDB == null) {
+            throw new InvalidTokenException();
+        }
+        inDB.setPasswordResetToken(null);
+        inDB.setPassword(passwordEncoder.encode(passwordUpdate.password()));
+        inDB.setActive(true);
+        userRepository.save(inDB);
+    }
 }

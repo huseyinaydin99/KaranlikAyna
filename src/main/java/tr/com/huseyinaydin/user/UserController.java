@@ -113,4 +113,10 @@ public class UserController {
       userService.handleResetRequest(passwordResetRequest);
       return new GenericMessage("Şifrenizi sıfırlamanız için e-posta adresinize gelen postayı kontrol ediniz.");
     }
+
+    @PatchMapping("/api/v1/users/{token}/password")
+    GenericMessage setPassword(@PathVariable String token, @Valid @RequestBody PasswordUpdate passwordUpdate){
+        userService.updatePassword(token, passwordUpdate);
+        return new GenericMessage("Şifre güncelleme işlemi başarılı.");
+    }
 }
