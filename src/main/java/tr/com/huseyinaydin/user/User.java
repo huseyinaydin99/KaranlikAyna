@@ -1,14 +1,19 @@
 package tr.com.huseyinaydin.user;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import tr.com.huseyinaydin.auth.token.Token;
 /**import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -46,6 +51,10 @@ public class User {
 
     @Lob
     private String image;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    List<Token> tokens;
+    
     /*String firstName;
     String lastName;
 
