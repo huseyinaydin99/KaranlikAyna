@@ -31,7 +31,11 @@ export default createBrowserRouter([
       {
         path: "/login",
         Component: Login
-      }
+      },
+      {
+        path: "/password-reset/request",
+        Component: PasswordResetRequest
+      },
     ],
   },
 ]);

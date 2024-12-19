@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 //import { useAuthDispatch } from "@/shared/state/context";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/shared/state/redux";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Login() {
   const authState = useContext(AuthContext);
@@ -159,6 +160,10 @@ export function Login() {
                 {t("login")}
               </Button>
             </div>
+          </div>
+
+          <div className="card-footer text-center">
+            <Link to="/password-reset/request">Şifreni mi unuttun?</Link>
           </div>
         </form>
       </div>
