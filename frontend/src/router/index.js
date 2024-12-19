@@ -22,19 +22,23 @@ export default createBrowserRouter([
       },
       {
         path: "/activation/:token",
-        Component: Activation
+        Component: Activation,
       },
       {
         path: "/user/:id",
-        Component: User
+        Component: User,
       },
       {
         path: "/login",
-        Component: Login
+        Component: Login,
       },
       {
         path: "/password-reset/request",
-        Component: PasswordResetRequest
+        Component: PasswordResetRequest,
+      },
+      {
+        path: "/password-reset/set",
+        Component: SetPassword,
       },
     ],
   },
